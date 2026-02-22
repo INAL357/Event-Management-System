@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.jwt.Expiration_TIME",
+      "type": "java.lang.String",
+      "description": "Description for spring.jwt.Expiration_TIME."
+  }
+] }

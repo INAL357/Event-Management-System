@@ -33,7 +33,7 @@ public class ServiceImpl implements EventService{
     public Event updateEvent(Long id, Event event) {
         Event existing = eventRepository.getById(id);
 
-        existing.setName(event.getName());
+        existing.setUsername(event.getUsername());
         existing.setDescription(event.getDescription());
         existing.setEventDate(event.getEventDate());
         existing.setLocation(event.getLocation());

@@ -21,7 +21,7 @@ public class Booking {
     // Many bookings can belong to one user
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User Username;
 
     // Many bookings can belong to one event
     @ManyToOne

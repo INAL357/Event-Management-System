@@ -21,7 +21,7 @@ public class Event {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String username;
 
     @Column(length = 1500)
     private String description;
