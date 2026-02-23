@@ -7,7 +7,6 @@ import com.app.eventmanagement.dto.SignUpRequest;
 import com.app.eventmanagement.model.AuthProvider;
 import com.app.eventmanagement.model.Role;
 import com.app.eventmanagement.security.jwt.JwtUtil;
-import com.nimbusds.oauth2.sdk.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,12 +44,12 @@ private PasswordEncoder passwordEncoder;
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
+                        request.getEmail(),
                         request.getPassword()
                 )
         );
 
-        String token = jwtUtil.generateToken(request.getUsername());
+        String token = jwtUtil.generateToken(request.getEmail());
         System.out.println("TOKEN: " + token);
         return ResponseEntity.ok(new AuthResponse(token));
     }

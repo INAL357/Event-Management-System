@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "bookings")
 @Getter
@@ -18,12 +17,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many bookings can belong to one user
+    // Booking belongs to a user
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User Username;
+    private User user;
 
-    // Many bookings can belong to one event
+    // Booking belongs to an event
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
@@ -32,6 +31,7 @@ public class Booking {
     private Long amount;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
     private String paymentId;

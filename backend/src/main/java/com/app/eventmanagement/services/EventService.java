@@ -16,4 +16,5 @@ public interface EventService {
 
     void deleteEvent(Long id);
 
+    boolean isOwner(Long id, String username);
 }

@@ -1,7 +1,9 @@
 package com.app.eventmanagement.model;
 
-    public enum Role{
+
+public enum Role{
         ADMIN,
+        ORGANIZER,
         USER
     }
 

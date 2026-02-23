@@ -3,6 +3,7 @@ package com.app.eventmanagement.security.config;
 import com.app.eventmanagement.security.jwt.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,17 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/organizer/**").hasRole("ORGANIZER")
+
+                        .requestMatchers(HttpMethod.POST, "/api/events/**")
+                        .hasAnyRole("ADMIN", "ORGANIZER")
+
+                        .requestMatchers("/api/events/**")
+                        .hasAnyRole("USER","ADMIN","ORGANIZER")
+
+                        .anyRequest().authenticated()
+                )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

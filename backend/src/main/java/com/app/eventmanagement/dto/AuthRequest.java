@@ -1,6 +1,7 @@
 package com.app.eventmanagement.dto;
 
 import lombok.*;
+import org.jspecify.annotations.Nullable;
 
 @Getter
 @Setter
@@ -8,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class AuthRequest {
-    private String username;
+    private String email;
     private String password;
+
+
 }
