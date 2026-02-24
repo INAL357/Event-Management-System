@@ -88,13 +88,13 @@ public class ServiceImpl implements EventService{
         eventRepository.deleteById(id);
 
         //  ADMIN can delete anything
-        if (user.getRole() == Role.ADMIN) {
+        if (user.getRole() == Role.ROLE_ADMIN) {
             eventRepository.delete(event);
             return;
         }
 
         // ORGANIZER can delete only their own event
-        if (user.getRole() == Role.ORGANIZER &&
+        if (user.getRole() == Role.ROLE_ORGANIZER &&
                 event.getCreatedBy().getId().equals(user.getId())) {
 
             eventRepository.delete(event);
