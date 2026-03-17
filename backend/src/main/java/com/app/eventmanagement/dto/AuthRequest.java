@@ -1,7 +1,7 @@
 package com.app.eventmanagement.dto;
 
 import lombok.*;
-import org.jspecify.annotations.Nullable;
+
 
 @Getter
 @Setter

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceImpl implements EventService{
+public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
 
@@ -111,5 +111,19 @@ public class ServiceImpl implements EventService{
 
         return event.getCreatedBy().getUsername().equals(username);
     }
+
+    @Override
+    public List<Event> searchEvents(String location, String name) {
+        if(location!=null){
+            return eventRepository.findByLocation(location);
+        }
+
+        if(name!=null){
+            return eventRepository.findByNameContainingIgnoreCase(name);
+
+        }
+        return eventRepository.findAll();
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.app.eventmanagement.services;
 
 import com.app.eventmanagement.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
@@ -17,4 +18,8 @@ public interface EventService {
     void deleteEvent(Long id);
 
     boolean isOwner(Long id, String username);
+
+    List<Event> searchEvents(String location, String name);
+
+
 }

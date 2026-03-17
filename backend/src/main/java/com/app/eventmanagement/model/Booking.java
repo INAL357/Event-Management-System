@@ -4,40 +4,53 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-@Entity
+
 @Table(name = "bookings")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@Entity
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Booking belongs to a user
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Booking belongs to an event
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status = BookingStatus.BOOKED;
+
     @Column(nullable = false)
     private Long amount;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus paymentStatus;
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
     private String paymentId;
 
-    private LocalDateTime bookingDate = LocalDateTime.now();
+    private int quantity;
 
+    private double totalPrice;
+
+    @Builder.Default
+    private LocalDateTime bookingTime = LocalDateTime.now();
+
+    @Builder.Default
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Builder.Default
+    private boolean used = false;
 }

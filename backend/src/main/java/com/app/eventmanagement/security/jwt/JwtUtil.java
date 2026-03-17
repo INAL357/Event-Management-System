@@ -1,11 +1,10 @@
 package com.app.eventmanagement.security.jwt;
 
-import com.app.eventmanagement.model.Role;
+import com.app.eventmanagement.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -23,17 +22,15 @@ public class JwtUtil {
     @Value("${jwt.EXPIRATION_TIME}")
     private long EXPIRATION_TIME;
 
-
-    private Role role;
-
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String userName) {
+
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(userName)
-                .claim("role",role)
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -44,13 +41,13 @@ public class JwtUtil {
         return getClaims(token).getSubject();
     }
 
+    public String extractRole(String token) {
+        return getClaims(token).get("role", String.class);
+    }
+
     public boolean validateToken(String token, UserDetails userDetails) {
-        try {
-            return extractUsername(token).equals(userDetails.getUsername())
-                    && !isTokenExpired(token);
-        } catch (Exception e) {
-            return false;
-        }
+        return extractUsername(token).equals(userDetails.getUsername())
+                && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

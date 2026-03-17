@@ -49,29 +49,44 @@ private PasswordEncoder passwordEncoder;
                 )
         );
 
-        String token = jwtUtil.generateToken(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = jwtUtil.generateToken(user);
+
         System.out.println("TOKEN: " + token);
         return ResponseEntity.ok(new AuthResponse(token));
     }
-
- @PostMapping("/signup")
+    @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest){
-     System.out.println("EMAIL: " + signUpRequest.getEmail());
-    if(userRepository.findByEmail(signUpRequest.getUsername()).isPresent()){
-        return ResponseEntity.badRequest().body("User Already Exists");
+
+        System.out.println("EMAIL: " + signUpRequest.getEmail());
+
+
+        if(userRepository.findByEmail(signUpRequest.getEmail()).isPresent()){
+            return ResponseEntity.badRequest().body("User Already Exists");
+        }
+
+        User user = new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+
+        // ROLE HANDLING
+        if (signUpRequest.getRole() == null || signUpRequest.getRole() == Role.ROLE_USER) {
+            user.setRole(Role.ROLE_USER);
+
+        } else if (signUpRequest.getRole() == Role.ROLE_ORGANIZER) {
+            user.setRole(Role.ROLE_ORGANIZER);
+
+        } else {
+            return ResponseEntity.badRequest().body("Invalid role");
+        }
+
+        user.setProvider(AuthProvider.LOCAL);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok("User registered successfully");
     }
-
-     User user = new User();
-     user.setUsername(signUpRequest.getUsername());
-     user.setEmail(signUpRequest.getEmail());
-     user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
-     user.setRole(Role.USER);
-     user.setProvider(AuthProvider.LOCAL);
-
-    userRepository.save(user);
-
-
-     return  ResponseEntity.ok("User registered successfully");
- }
 }
